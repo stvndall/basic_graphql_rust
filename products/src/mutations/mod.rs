@@ -1,4 +1,4 @@
-use async_graphql::{EmptyMutation, Object};
+use async_graphql::Object;
 
 pub struct RootMutation;
 

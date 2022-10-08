@@ -1,4 +1,4 @@
-use async_graphql::{Object, ComplexObject};
+use async_graphql::Object;
 
 struct Special {
     a: i32,

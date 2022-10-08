@@ -2,8 +2,6 @@ mod mutations;
 mod query;
 mod subscriptions;
 
-use std::time::Duration;
-
 use actix_web::{guard, web, web::Data, App, Result};
 use actix_web::{HttpRequest, HttpResponse, HttpServer};
 use async_graphql::http::GraphiQLSource;
@@ -24,8 +22,8 @@ async fn handler_graphiql() -> Result<HttpResponse> {
         .content_type("text/html; charset=utf-8")
         .body(
             GraphiQLSource::build()
-                .endpoint("http://localhost:8080")
-                .subscription_endpoint("ws://localhost:8080")
+                .endpoint("http://localhost:8081")
+                .subscription_endpoint("ws://localhost:8081")
                 .finish(),
         ))
 }
@@ -54,7 +52,7 @@ async fn main() -> std::io::Result<()> {
             )
             .service(web::resource("/").guard(guard::Get()).to(handler_graphiql))
     })
-    .bind("localhost:8080")?
+    .bind("localhost:8081")?
     .run()
     .await
 }
