@@ -38,9 +38,9 @@ async fn handler_ws(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let schema = Schema::new(RootQuery, RootMutation, RootSubscription)
-        .enable_federation()
-        .finish();
+    let schema = Schema::new(RootQuery, RootMutation, RootSubscription);
+
+    println!("Setting up {} on {}", r#"Users"#, 8083);
 
     HttpServer::new(move || {
         App::new()

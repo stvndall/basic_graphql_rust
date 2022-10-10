@@ -8,7 +8,6 @@ pub struct Product {
 
 #[ComplexObject]
 impl Product {
-    #[graphql(provides = "review")]
     async fn review(&self) -> Vec<String> {
         vec!["sadfasdfa".to_string(), "lkdmlkafd".to_string()]
     }
@@ -22,8 +21,6 @@ impl RootQuery {
     }
     #[graphql(entity)]
     async fn find_product_by_id(&self, #[graphql(key)] id: ID) -> Product {
-        Product {
-            id,
-        }
+        Product { id }
     }
 }

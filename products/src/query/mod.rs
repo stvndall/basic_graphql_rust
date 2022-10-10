@@ -1,13 +1,20 @@
 use async_graphql::{Object, SimpleObject, ID};
 
+
 #[derive(SimpleObject)]
-struct Product {
+pub(crate) struct Product {
     id: ID,
     name: String,
 }
 
-impl Product {}
-
+impl Product {
+    pub fn new(id: &str, name: &str) -> Self {
+        Product {
+            id: id.into(),
+            name: name.to_string(),
+        }
+    }
+}
 pub struct RootQuery;
 #[Object]
 impl RootQuery {

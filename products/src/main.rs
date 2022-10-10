@@ -5,7 +5,7 @@ mod subscriptions;
 use actix_web::{guard, web, web::Data, App, Result};
 use actix_web::{HttpRequest, HttpResponse, HttpServer};
 use async_graphql::http::GraphiQLSource;
-use async_graphql::*;
+use async_graphql::Schema;
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
 use mutations::RootMutation;
 use query::RootQuery;
@@ -17,16 +17,16 @@ async fn handler(schema: web::Data<ServiceSchema>, req: GraphQLRequest) -> Graph
     schema.execute(req.into_inner()).await.into()
 }
 
-async fn handler_graphiql() -> Result<HttpResponse> {
-    Ok(HttpResponse::Ok()
-        .content_type("text/html; charset=utf-8")
-        .body(
-            GraphiQLSource::build()
-                .endpoint("http://localhost:8082")
-                .subscription_endpoint("ws://localhost:8082")
-                .finish(),
-        ))
-}
+// async fn handler_graphiql() -> Result<HttpResponse> {
+//     Ok(HttpResponse::Ok()
+//         .content_type("text/html; charset=utf-8")
+//         .body(
+//             GraphiQLSource::build()
+//                 .endpoint("http://localhost:8082")
+//                 .subscription_endpoint("ws://localhost:8082")
+//                 .finish(),
+//         ))
+// }
 
 async fn handler_ws(
     schema: web::Data<ServiceSchema>,
@@ -40,6 +40,8 @@ async fn handler_ws(
 async fn main() -> std::io::Result<()> {
     let schema = Schema::new(RootQuery, RootMutation, RootSubscription);
 
+    println!("Setting up {} on {}", r#"Product"#, 8082);
+
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(schema.clone()))
@@ -50,7 +52,7 @@ async fn main() -> std::io::Result<()> {
                     .guard(guard::Header("upgrade", "websocket"))
                     .to(handler_ws),
             )
-            .service(web::resource("/").guard(guard::Get()).to(handler_graphiql))
+            // .service(web::resource("/").guard(guard::Get()).to(handler_graphiql))
     })
     .bind("localhost:8082")?
     .run()

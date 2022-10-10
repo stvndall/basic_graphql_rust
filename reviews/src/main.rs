@@ -40,6 +40,8 @@ async fn handler_ws(
 async fn main() -> std::io::Result<()> {
     let schema = Schema::new(RootQuery, RootMutation, RootSubscription);
 
+    println!("Setting up {} on {}", r#"Review"#, 8081);
+
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(schema.clone()))
